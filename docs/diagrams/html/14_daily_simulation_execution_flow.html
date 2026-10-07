@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Daily Simulation Execution Flow - Conversational Consumer Finance</title>
+<style>
+body{font-family:system-ui,sans-serif;background:#0D1B22;color:#E8EAED;margin:0;min-height:100vh;display:flex;flex-direction:column}
+header{background:linear-gradient(135deg,#1B3139,#0F2028);border-bottom:3px solid #FF3621;padding:20px 40px;display:flex;align-items:center;gap:16px}
+.logo{width:32px;height:32px;background:#FF3621;border-radius:4px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:18px;color:#fff}
+h1{font-size:18px;font-weight:600}
+.badge{background:#077A9D;color:#fff;padding:2px 10px;border-radius:12px;font-size:11px;font-weight:600;text-transform:uppercase}
+.num{color:#FFAB00;font-size:14px;font-weight:700;margin-left:auto}
+.sub{background:#162730;padding:12px 40px;font-size:13px;color:#9AA0A6;border-bottom:1px solid rgba(255,255,255,.06)}
+main{flex:1;display:flex;align-items:center;justify-content:center;padding:40px}
+.mermaid{background:#162730;border-radius:12px;padding:40px;box-shadow:0 4px 24px rgba(0,0,0,.3);max-width:100%;overflow-x:auto}
+.mermaid svg{max-width:100%;height:auto}
+.node:hover{filter:brightness(1.2);cursor:pointer}
+footer{background:#162730;border-top:1px solid rgba(255,255,255,.06);padding:12px 40px;font-size:11px;color:#9AA0A6;display:flex;justify-content:space-between}
+@media(max-width:768px){header,main,.sub,footer{padding:16px 20px}.mermaid{padding:20px}}
+</style>
+</head>
+<body>
+<header>
+<div class="logo">D</div>
+<h1>Daily Simulation Execution Flow</h1>
+<span class="badge">Phase 1</span>
+<span class="num">Diagram 14 of 17</span>
+</header>
+<div class="sub">Conversational Consumer Finance &mdash; FIBO-Aligned &bull; 12 State Machines &bull; 14 Silver Tables &bull; 3 Metric Views &bull; Single Agent per Locale</div>
+<main>
+<div class="mermaid">
+graph TB
+    Start["Daily Lakeflow Job<br/>Triggered @ 6 AM"]
+
+    subgraph Load["1. Load State"]
+        State["Delta State Store<br/>Customer states, balances,<br/>episodes, products, credit"]
+        Locale["Locale Config<br/>Holidays, merchants,<br/>salary dates, payment schemes"]
+    end
+
+    subgraph Context["2. Day Context"]
+        DayType["Determine Day Type<br/>Weekday/Weekend<br/>Holiday/Seasonal"]
+        Behavior["Set Behavioral State<br/>NORMAL / PAYDAY /<br/>BILL_WINDOW / WEEKEND /<br/>LOW_BALANCE / ANOMALY"]
+        Tier["Determine Active Tiers<br/>Phase-gated: which tiers<br/>are enabled for this deployment"]
+    end
+
+    subgraph Episodes["3. Advance 40+ Episodes (per customer, 12 SMs)"]
+        subgraph T1["Tier 1: Foundation"]
+            E1["Salary & Income"]
+            E2["Recurring Bills"]
+            E3["Consumer Spending"]
+            E4["Transfers"]
+        end
+        subgraph T2["Tier 2: Behavioral"]
+            E5["Savings Transfers"]
+            E6["Spending Patterns"]
+            E7["Budget Tracking"]
+        end
+        subgraph T3["Tier 3: Product"]
+            E8["Product Eligibility"]
+            E9["Account Upgrades"]
+        end
+        subgraph T4["Tier 4: Credit"]
+            E10["Credit Card Events"]
+            E11["Loan Repayments"]
+        end
+        subgraph T5["Tier 5: Security"]
+            E12["Fraud Scenarios"]
+            E13["KYC/AML Events"]
+        end
+    end
+
+    subgraph Update["4. Update State"]
+        Balances["Update Balances<br/>Running balance per account"]
+        Products["Update Product States<br/>Threshold crossings"]
+        Coupling["Apply Coupling Points<br/>12 SMs × bidirectional"]
+    end
+
+    subgraph Persist["5. Persist"]
+        Bronze["Write Events<br/>→ Bronze Delta Tables"]
+        StateStore["Update State Store<br/>→ Delta Table"]
+    end
+
+    subgraph Pipeline["6. SDP Pipeline"]
+        SDP["Bronze → Silver (14 tables) → Gold (3 MVs)<br/>(streaming / incremental)"]
+    end
+
+    Start --> Load
+    Load --> Context
+    Context --> Episodes
+    Episodes --> Update
+    Update --> Persist
+    Persist --> Pipeline
+
+    style Episodes fill:#e6f3ff,stroke:#0066cc
+    style Pipeline fill:#d4edda,stroke:#28a745
+    style T1 fill:#d4edda,stroke:#28a745
+    style T2 fill:#cce5ff,stroke:#004085
+    style T3 fill:#fff3cd,stroke:#856404
+    style T4 fill:#ffe6cc,stroke:#cc6600
+    style T5 fill:#f8d7da,stroke:#721c24
+</div>
+</main>
+<footer>
+<span>Author: Matthew Giglia &bull; Databricks Field Engineering</span>
+<span>Updated: Oct 7, 2026 &bull; v2 (Expanded Architecture)</span>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({startOnLoad:true,theme:'dark',themeVariables:{primaryColor:'#077A9D',primaryTextColor:'#E8EAED',primaryBorderColor:'#077A9D',lineColor:'#9AA0A6',secondaryColor:'#1B3139',tertiaryColor:'#162730',noteBkgColor:'#2A3A44',noteTextColor:'#E8EAED',noteBorderColor:'#077A9D',actorBkg:'#077A9D',actorTextColor:'#fff',actorBorder:'#077A9D',signalColor:'#E8EAED',signalTextColor:'#E8EAED'},flowchart:{curve:'basis',htmlLabels:true},sequence:{mirrorActors:false,actorMargin:50}});</script>
+</body>
+</html>

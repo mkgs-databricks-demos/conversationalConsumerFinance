@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>Account Lifecycle State Machine</title></head>
+<body style="background:#0D1B22;display:flex;justify-content:center;padding:40px">
+<div class="mermaid">
+stateDiagram-v2
+    [*] --> PROSPECT
+
+    PROSPECT --> APPLICATION_SUBMITTED: APPLY
+    APPLICATION_SUBMITTED --> KYC_PENDING: KYC_CHECK
+
+    KYC_PENDING --> APPROVED: KYC_PASS (92%)
+    KYC_PENDING --> REJECTED: KYC_FAIL (8%)
+    REJECTED --> [*]
+
+    APPROVED --> OPEN: ACTIVATE
+    OPEN --> ACTIVE: FIRST_TRANSACTION
+
+    ACTIVE --> DORMANT: NO_ACTIVITY_12MO
+    ACTIVE --> BLOCKED: COMPLIANCE_BLOCK (0.01%)
+    ACTIVE --> CLOSED: CLOSE_REQUEST
+    ACTIVE --> UPGRADED: TIER_UPGRADE
+
+    DORMANT --> REACTIVATED: TRANSACTION
+    DORMANT --> CLOSED: AUTO_CLOSE
+
+    REACTIVATED --> ACTIVE: CONTINUE
+
+    BLOCKED --> ACTIVE: RESOLVE
+
+    UPGRADED --> ACTIVE: CONTINUE
+
+    CLOSED --> [*]
+
+    note right of ACTIVE
+        Primary operating state.
+        Coupled to all other SMs.
+        Tier: Foundation (all phases)
+    end note
+
+    note right of UPGRADED
+        Tier 3: Product Lifecycle
+        Triggered by balance/tenure
+        thresholds from coupling points.
+    end note
+
+    note right of DORMANT
+        Triggered by 365 days
+        with no transactions.
+    end note
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({startOnLoad:true,theme:'dark',themeVariables:{primaryColor:'#077A9D',primaryTextColor:'#E8EAED',primaryBorderColor:'#077A9D',lineColor:'#9AA0A6',secondaryColor:'#1B3139',tertiaryColor:'#162730',noteBkgColor:'#2A3A44',noteTextColor:'#E8EAED',noteBorderColor:'#077A9D',actorBkg:'#077A9D',actorTextColor:'#fff',actorBorder:'#077A9D',signalColor:'#E8EAED',signalTextColor:'#E8EAED'},flowchart:{curve:'basis',htmlLabels:true},sequence:{mirrorActors:false,actorMargin:50}});</script>
+</body></html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Three-Bundle Deployment - Conversational Consumer Finance</title>
+<style>
+body{font-family:system-ui,sans-serif;background:#0D1B22;color:#E8EAED;margin:0;min-height:100vh;display:flex;flex-direction:column}
+header{background:linear-gradient(135deg,#1B3139,#0F2028);border-bottom:3px solid #FF3621;padding:20px 40px;display:flex;align-items:center;gap:16px}
+.logo{width:32px;height:32px;background:#FF3621;border-radius:4px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:18px;color:#fff}
+h1{font-size:18px;font-weight:600}
+.badge{background:#077A9D;color:#fff;padding:2px 10px;border-radius:12px;font-size:11px;font-weight:600;text-transform:uppercase}
+.num{color:#FFAB00;font-size:14px;font-weight:700;margin-left:auto}
+.sub{background:#162730;padding:12px 40px;font-size:13px;color:#9AA0A6;border-bottom:1px solid rgba(255,255,255,.06)}
+main{flex:1;display:flex;align-items:center;justify-content:center;padding:40px}
+.mermaid{background:#162730;border-radius:12px;padding:40px;box-shadow:0 4px 24px rgba(0,0,0,.3);max-width:100%;overflow-x:auto}
+.mermaid svg{max-width:100%;height:auto}
+.node:hover{filter:brightness(1.2);cursor:pointer}
+footer{background:#162730;border-top:1px solid rgba(255,255,255,.06);padding:12px 40px;font-size:11px;color:#9AA0A6;display:flex;justify-content:space-between}
+@media(max-width:768px){header,main,.sub,footer{padding:16px 20px}.mermaid{padding:20px}}
+</style>
+</head>
+<body>
+<header>
+<div class="logo">D</div>
+<h1>Three-Bundle Deployment</h1>
+<span class="badge">Phase 1</span>
+<span class="num">Diagram 02 of 17</span>
+</header>
+<div class="sub">Conversational Consumer Finance &mdash; FIBO-Aligned &bull; 12 State Machines &bull; 14 Silver Tables &bull; 3 Metric Views &bull; Single Agent per Locale</div>
+<main>
+<div class="mermaid">
+graph TB
+    subgraph B1["Bundle 1: Infrastructure<br/>(All Environments)"]
+        B1_UC["UC Catalog + Schemas<br/>bronze · silver · gold"]
+        B1_LB["Lakebase Project<br/>+ Branches (prod/dev/test)"]
+        B1_SDP["Lakeflow Pipeline (SDP)<br/>Bronze → Silver → Gold"]
+        B1_Jobs["Lakeflow Jobs<br/>Proactive Insights · Mapping"]
+        B1_Vol["UC Volumes<br/>KA Documents · Mapping Specs"]
+    end
+
+    subgraph B2["Bundle 2: Data Generator<br/>(Dev/Demo ONLY — Optional)"]
+        B2_SM["Full-Spectrum Simulator<br/>12 SMs × 40+ Episodes × 5 Tiers"]
+        B2_Daily["Daily Simulation Job<br/>Lakeflow Job @ 6 AM"]
+        B2_Back["Backfill Job<br/>On-demand · 6 months"]
+        B2_Locale["Locale Configs<br/>US · GB · NL"]
+    end
+
+    subgraph B3["Bundle 3: Application<br/>(All Environments)"]
+        B3_App["Databricks App<br/>Node.js AppKit + React"]
+        B3_GA["Single Genie Agent<br/>Per Locale (3 MVs + KA)"]
+        B3_MV["3 Metric Views<br/>Parameterized · Per Locale"]
+        B3_Pages["60 UC Pages (Phase 1)<br/>Per Locale · 12 Subdomains"]
+        B3_Domain["UC Domain + 12 Subdomains<br/>Consumer Banking"]
+    end
+
+    B2_SM -->|"writes events"| B1_UC
+    B3_App -->|"depends on"| B1_LB
+    B3_App -->|"queries via"| B3_GA
+    B3_GA -->|"queries"| B3_MV
+    B3_MV -->|"sources from"| B1_UC
+
+    style B2_SM fill:#ffd700,stroke:#333
+    style B2_Daily fill:#ffd700,stroke:#333
+    style B2_Back fill:#ffd700,stroke:#333
+    style B2_Locale fill:#ffd700,stroke:#333
+</div>
+</main>
+<footer>
+<span>Author: Matthew Giglia &bull; Databricks Field Engineering</span>
+<span>Updated: Oct 7, 2026 &bull; v2 (Expanded Architecture)</span>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({startOnLoad:true,theme:'dark',themeVariables:{primaryColor:'#077A9D',primaryTextColor:'#E8EAED',primaryBorderColor:'#077A9D',lineColor:'#9AA0A6',secondaryColor:'#1B3139',tertiaryColor:'#162730',noteBkgColor:'#2A3A44',noteTextColor:'#E8EAED',noteBorderColor:'#077A9D',actorBkg:'#077A9D',actorTextColor:'#fff',actorBorder:'#077A9D',signalColor:'#E8EAED',signalTextColor:'#E8EAED'},flowchart:{curve:'basis',htmlLabels:true},sequence:{mirrorActors:false,actorMargin:50}});</script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>Transaction Processing State Machine</title></head>
+<body style="background:#0D1B22;display:flex;justify-content:center;padding:40px">
+<div class="mermaid">
+stateDiagram-v2
+    [*] --> INITIATED
+
+    INITIATED --> AUTHORIZED: AUTHORIZE
+    INITIATED --> DECLINED: DECLINE (2-5%)
+
+    AUTHORIZED --> PENDING_SETTLEMENT: SETTLE
+    PENDING_SETTLEMENT --> POSTED: POST (1-3 biz days)
+
+    POSTED --> RECONCILED: RECONCILE (end of day)
+    POSTED --> DISPUTED: CUSTOMER_DISPUTE (1-90 days)
+    POSTED --> REVERSED: MERCHANT_REVERSE
+    POSTED --> FLAGGED: FRAUD_DETECT
+
+    DISPUTED --> REVERSED: RESOLVE_FAVOR_CUSTOMER
+    DISPUTED --> RECONCILED: RESOLVE_FAVOR_MERCHANT
+
+    REVERSED --> REFUNDED: REFUND_CREDIT
+
+    FLAGGED --> BLOCKED: CONFIRM_FRAUD
+    FLAGGED --> RECONCILED: FALSE_POSITIVE
+
+    DECLINED --> [*]
+    RECONCILED --> [*]
+    REFUNDED --> [*]
+    BLOCKED --> [*]
+
+    note right of PENDING_SETTLEMENT
+        Timing varies by locale:
+        SCT: 1 day · SCT Inst: instant
+        ACH: 1-3 days · FPS: instant
+        BACS: 3 days · CHAPS: same day
+    end note
+
+    note right of FLAGGED
+        Tier 5: Fraud & Security
+        Anomaly detection triggers
+        from spending pattern analysis.
+    end note
+
+    note right of DISPUTED
+        SEPA SDD Core:
+        8-week unconditional storno
+        13-month for unauthorized
+    end note
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({startOnLoad:true,theme:'dark',themeVariables:{primaryColor:'#077A9D',primaryTextColor:'#E8EAED',primaryBorderColor:'#077A9D',lineColor:'#9AA0A6',secondaryColor:'#1B3139',tertiaryColor:'#162730',noteBkgColor:'#2A3A44',noteTextColor:'#E8EAED',noteBorderColor:'#077A9D',actorBkg:'#077A9D',actorTextColor:'#fff',actorBorder:'#077A9D',signalColor:'#E8EAED',signalTextColor:'#E8EAED'},flowchart:{curve:'basis',htmlLabels:true},sequence:{mirrorActors:false,actorMargin:50}});</script>
+</body></html>

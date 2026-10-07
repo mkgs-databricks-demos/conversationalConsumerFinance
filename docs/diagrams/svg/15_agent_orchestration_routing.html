@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>Agent Orchestration Routing</title></head>
+<body style="background:#0D1B22;display:flex;justify-content:center;padding:40px">
+<div class="mermaid">
+flowchart TB
+    Consumer[Consumer Question]
+    subgraph AppLayer[Databricks App Layer]
+        Session[Session Lookup]
+        Sanitize[Input Sanitization]
+        Inject[Inject consumer_guid]
+    end
+    subgraph SingleAgent[Single Genie Agent per locale]
+        Agent[Consumer Banking Agent]
+        MV_Txn[customer_transaction_metrics]
+        MV_Prod[customer_product_metrics]
+        MV_Behav[customer_behavior_metrics]
+        KA_Vol[Knowledge Volume]
+    end
+    subgraph PostQuery[Post-Query Validation]
+        SQLVal[SQL Predicate Validator]
+        AiDecide[ai_decide parallel]
+    end
+    Consumer --> Session --> Sanitize --> Inject
+    Inject --> Agent
+    Agent --> MV_Txn
+    Agent --> MV_Prod
+    Agent --> MV_Behav
+    Agent --> KA_Vol
+    Agent --> SQLVal --> AiDecide
+    style SingleAgent fill:#e6f3ff,stroke:#0066cc
+    style PostQuery fill:#fff3cd,stroke:#ffc107
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({startOnLoad:true,theme:'dark',themeVariables:{primaryColor:'#077A9D',primaryTextColor:'#E8EAED',primaryBorderColor:'#077A9D',lineColor:'#9AA0A6',secondaryColor:'#1B3139',tertiaryColor:'#162730',noteBkgColor:'#2A3A44',noteTextColor:'#E8EAED',noteBorderColor:'#077A9D',actorBkg:'#077A9D',actorTextColor:'#fff',actorBorder:'#077A9D',signalColor:'#E8EAED',signalTextColor:'#E8EAED'},flowchart:{curve:'basis',htmlLabels:true},sequence:{mirrorActors:false,actorMargin:50}});</script>
+</body></html>

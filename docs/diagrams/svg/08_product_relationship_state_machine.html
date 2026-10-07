@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>Product Relationship State Machine</title></head>
+<body style="background:#0D1B22;display:flex;justify-content:center;padding:40px">
+<div class="mermaid">
+stateDiagram-v2
+    [*] --> ELIGIBLE
+
+    ELIGIBLE --> OFFERED: OFFER (threshold crossed)
+    OFFERED --> APPLIED: APPLY
+    OFFERED --> ELIGIBLE: DECLINE_OFFER
+
+    APPLIED --> APPROVED: APPROVE
+    APPLIED --> ELIGIBLE: REJECT
+
+    APPROVED --> ACTIVE: ACTIVATE
+
+    ACTIVE --> RENEWAL_PENDING: RENEWAL_DUE
+    ACTIVE --> DOWNGRADED: DOWNGRADE_TRIGGER
+    ACTIVE --> OVERLIMIT: CREDIT_EXCEEDED
+    ACTIVE --> DELINQUENT: MISSED_PAYMENT
+    ACTIVE --> CANCELLED: CLOSE
+
+    RENEWAL_PENDING --> RENEWED: RENEW
+    RENEWAL_PENDING --> CANCELLED: CANCEL
+
+    RENEWED --> ACTIVE: CONTINUE
+    DOWNGRADED --> ACTIVE: CONTINUE
+    OVERLIMIT --> ACTIVE: PAYMENT_RECEIVED
+    DELINQUENT --> ACTIVE: PAYMENT_RECEIVED
+    DELINQUENT --> COLLECTIONS: 90_DAYS_PAST_DUE
+
+    CANCELLED --> [*]
+    COLLECTIONS --> [*]
+
+    note right of ELIGIBLE
+        Tier 3: Product Lifecycle
+        Coupling triggers:
+        Balance > €10K → Premium Savings
+        Salary > €4K/mo → Credit Card
+        Account age > 6mo → Personal Loan
+        Spending > €2K/mo → Cashback Card
+    end note
+
+    note right of OVERLIMIT
+        Tier 4: Credit Products
+        Credit utilization > 100%
+        triggers overlimit state.
+    end note
+
+    note right of DELINQUENT
+        Tier 4: Credit Products
+        Missed payment triggers
+        delinquency tracking.
+    end note
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({startOnLoad:true,theme:'dark',themeVariables:{primaryColor:'#077A9D',primaryTextColor:'#E8EAED',primaryBorderColor:'#077A9D',lineColor:'#9AA0A6',secondaryColor:'#1B3139',tertiaryColor:'#162730',noteBkgColor:'#2A3A44',noteTextColor:'#E8EAED',noteBorderColor:'#077A9D',actorBkg:'#077A9D',actorTextColor:'#fff',actorBorder:'#077A9D',signalColor:'#E8EAED',signalTextColor:'#E8EAED'},flowchart:{curve:'basis',htmlLabels:true},sequence:{mirrorActors:false,actorMargin:50}});</script>
+</body></html>

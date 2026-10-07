@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Lakebase Session Lifecycle - Conversational Consumer Finance</title>
+<style>
+body{font-family:system-ui,sans-serif;background:#0D1B22;color:#E8EAED;margin:0;min-height:100vh;display:flex;flex-direction:column}
+header{background:linear-gradient(135deg,#1B3139,#0F2028);border-bottom:3px solid #FF3621;padding:20px 40px;display:flex;align-items:center;gap:16px}
+.logo{width:32px;height:32px;background:#FF3621;border-radius:4px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:18px;color:#fff}
+h1{font-size:18px;font-weight:600}
+.badge{background:#077A9D;color:#fff;padding:2px 10px;border-radius:12px;font-size:11px;font-weight:600;text-transform:uppercase}
+.num{color:#FFAB00;font-size:14px;font-weight:700;margin-left:auto}
+.sub{background:#162730;padding:12px 40px;font-size:13px;color:#9AA0A6;border-bottom:1px solid rgba(255,255,255,.06)}
+main{flex:1;display:flex;align-items:center;justify-content:center;padding:40px}
+.mermaid{background:#162730;border-radius:12px;padding:40px;box-shadow:0 4px 24px rgba(0,0,0,.3);max-width:100%;overflow-x:auto}
+.mermaid svg{max-width:100%;height:auto}
+.node:hover{filter:brightness(1.2);cursor:pointer}
+footer{background:#162730;border-top:1px solid rgba(255,255,255,.06);padding:12px 40px;font-size:11px;color:#9AA0A6;display:flex;justify-content:space-between}
+@media(max-width:768px){header,main,.sub,footer{padding:16px 20px}.mermaid{padding:20px}}
+</style>
+</head>
+<body>
+<header>
+<div class="logo">D</div>
+<h1>Lakebase Session Lifecycle</h1>
+<span class="badge">Phase 1</span>
+<span class="num">Diagram 11 of 17</span>
+</header>
+<div class="sub">Conversational Consumer Finance &mdash; FIBO-Aligned &bull; 12 State Machines &bull; 14 Silver Tables &bull; 3 Metric Views &bull; Single Agent per Locale</div>
+<main>
+<div class="mermaid">
+sequenceDiagram
+    participant Consumer
+    participant Gateway as API Gateway
+    participant App as Databricks App
+    participant LB as Lakebase<br/>(PgBouncer)
+    participant VS as Vector Search<br/>(Memory)
+
+    Note over Consumer,VS: First Request in Session
+
+    Consumer->>Gateway: Request + JWT
+    Gateway->>Gateway: Validate JWT<br/>Extract consumer claims
+    Gateway->>App: Signed headers<br/>(consumer_guid, language)<br/>+ M2M SPN
+
+    App->>LB: Lookup consumer_guid
+    LB-->>App: Consumer record<br/>(language_pref, consent_state)
+    App->>LB: Create session<br/>(session_token, expires_at, consumer_guid)
+    LB-->>App: session_token
+    App->>VS: Retrieve past conversations<br/>(semantic search)
+    VS-->>App: Relevant memory fragments
+    App-->>Consumer: Response + session_token
+
+    Note over Consumer,VS: Subsequent Requests (Same Session)
+
+    Consumer->>App: Request + session_token
+    App->>LB: Validate session_token (~2ms)
+    LB-->>App: Valid ✓<br/>(consumer_guid, language, consent)
+    Note right of App: No JWT revalidation needed
+    App->>LB: Load active conversation
+    LB-->>App: conversation_id, recent messages
+    App-->>Consumer: Response
+
+    Note over Consumer,VS: Session Expired
+
+    Consumer->>App: Request + expired session_token
+    App->>LB: Validate session_token
+    LB-->>App: Expired ✗
+    App-->>Consumer: 401 — Reauth required
+    Consumer->>Gateway: Refresh JWT
+    Gateway-->>Consumer: New JWT
+    Note right of Consumer: Flow restarts as<br/>"First Request"
+</div>
+</main>
+<footer>
+<span>Author: Matthew Giglia &bull; Databricks Field Engineering</span>
+<span>Updated: Oct 7, 2026 &bull; v2 (Expanded Architecture)</span>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({startOnLoad:true,theme:'dark',themeVariables:{primaryColor:'#077A9D',primaryTextColor:'#E8EAED',primaryBorderColor:'#077A9D',lineColor:'#9AA0A6',secondaryColor:'#1B3139',tertiaryColor:'#162730',noteBkgColor:'#2A3A44',noteTextColor:'#E8EAED',noteBorderColor:'#077A9D',actorBkg:'#077A9D',actorTextColor:'#fff',actorBorder:'#077A9D',signalColor:'#E8EAED',signalTextColor:'#E8EAED'},flowchart:{curve:'basis',htmlLabels:true},sequence:{mirrorActors:false,actorMargin:50}});</script>
+</body>
+</html>

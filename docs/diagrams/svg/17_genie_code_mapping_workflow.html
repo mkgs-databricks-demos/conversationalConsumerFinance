@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>Genie Code Mapping Workflow</title></head>
+<body style="background:#0D1B22;display:flex;justify-content:center;padding:40px">
+<div class="mermaid">
+sequenceDiagram
+    participant FDE as FDE Engineer
+    participant GC as Genie Code Session
+    participant UC as Unity Catalog
+    participant Data as Source Data
+    participant DAB as DAB Repo
+
+    Note over FDE,DAB: Phase 1 Research
+    FDE->>GC: Profile the Gold MVs
+    GC->>Data: SELECT sample data
+    Data-->>GC: Column listings
+    GC-->>FDE: Data profile report
+
+    Note over FDE,DAB: Phase 2 Build YAML
+    FDE->>GC: Create parameterized metric view
+    GC->>GC: Generate YAML definition
+    GC-->>FDE: CREATE VIEW DDL
+    FDE->>GC: Execute the DDL
+    GC->>UC: CREATE OR REPLACE VIEW
+    UC-->>GC: View created
+
+    Note over FDE,DAB: Phase 3 Validate
+    FDE->>GC: Test parameter enforcement
+    GC->>UC: SELECT without parameter
+    UC-->>GC: ERROR required parameter missing
+    FDE->>GC: Test with valid consumer_guid
+    GC->>UC: SELECT MEASURE total_balance
+    UC-->>GC: Consumer data returned
+
+    Note over FDE,DAB: Phase 4 Export and Commit
+    FDE->>GC: Export YAML templates
+    GC-->>FDE: Template files
+    FDE->>DAB: git add commit push
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({startOnLoad:true,theme:'dark',themeVariables:{primaryColor:'#077A9D',primaryTextColor:'#E8EAED',primaryBorderColor:'#077A9D',lineColor:'#9AA0A6',secondaryColor:'#1B3139',tertiaryColor:'#162730',noteBkgColor:'#2A3A44',noteTextColor:'#E8EAED',noteBorderColor:'#077A9D',actorBkg:'#077A9D',actorTextColor:'#fff',actorBorder:'#077A9D',signalColor:'#E8EAED',signalTextColor:'#E8EAED'},flowchart:{curve:'basis',htmlLabels:true},sequence:{mirrorActors:false,actorMargin:50}});</script>
+</body></html>

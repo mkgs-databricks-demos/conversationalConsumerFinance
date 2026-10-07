@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>Lakebase Session Lifecycle</title></head>
+<body style="background:#0D1B22;display:flex;justify-content:center;padding:40px">
+<div class="mermaid">
+sequenceDiagram
+    participant Consumer
+    participant Gateway as API Gateway
+    participant App as Databricks App
+    participant LB as Lakebase<br/>(PgBouncer)
+    participant VS as Vector Search<br/>(Memory)
+
+    Note over Consumer,VS: First Request in Session
+
+    Consumer->>Gateway: Request + JWT
+    Gateway->>Gateway: Validate JWT<br/>Extract consumer claims
+    Gateway->>App: Signed headers<br/>(consumer_guid, language)<br/>+ M2M SPN
+
+    App->>LB: Lookup consumer_guid
+    LB-->>App: Consumer record<br/>(language_pref, consent_state)
+    App->>LB: Create session<br/>(session_token, expires_at, consumer_guid)
+    LB-->>App: session_token
+    App->>VS: Retrieve past conversations<br/>(semantic search)
+    VS-->>App: Relevant memory fragments
+    App-->>Consumer: Response + session_token
+
+    Note over Consumer,VS: Subsequent Requests (Same Session)
+
+    Consumer->>App: Request + session_token
+    App->>LB: Validate session_token (~2ms)
+    LB-->>App: Valid ✓<br/>(consumer_guid, language, consent)
+    Note right of App: No JWT revalidation needed
+    App->>LB: Load active conversation
+    LB-->>App: conversation_id, recent messages
+    App-->>Consumer: Response
+
+    Note over Consumer,VS: Session Expired
+
+    Consumer->>App: Request + expired session_token
+    App->>LB: Validate session_token
+    LB-->>App: Expired ✗
+    App-->>Consumer: 401 — Reauth required
+    Consumer->>Gateway: Refresh JWT
+    Gateway-->>Consumer: New JWT
+    Note right of Consumer: Flow restarts as<br/>"First Request"
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({startOnLoad:true,theme:'dark',themeVariables:{primaryColor:'#077A9D',primaryTextColor:'#E8EAED',primaryBorderColor:'#077A9D',lineColor:'#9AA0A6',secondaryColor:'#1B3139',tertiaryColor:'#162730',noteBkgColor:'#2A3A44',noteTextColor:'#E8EAED',noteBorderColor:'#077A9D',actorBkg:'#077A9D',actorTextColor:'#fff',actorBorder:'#077A9D',signalColor:'#E8EAED',signalTextColor:'#E8EAED'},flowchart:{curve:'basis',htmlLabels:true},sequence:{mirrorActors:false,actorMargin:50}});</script>
+</body></html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>State Machine Coupling Points - Conversational Consumer Finance</title>
+<style>
+body{font-family:system-ui,sans-serif;background:#0D1B22;color:#E8EAED;margin:0;min-height:100vh;display:flex;flex-direction:column}
+header{background:linear-gradient(135deg,#1B3139,#0F2028);border-bottom:3px solid #FF3621;padding:20px 40px;display:flex;align-items:center;gap:16px}
+.logo{width:32px;height:32px;background:#FF3621;border-radius:4px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:18px;color:#fff}
+h1{font-size:18px;font-weight:600}
+.badge{background:#077A9D;color:#fff;padding:2px 10px;border-radius:12px;font-size:11px;font-weight:600;text-transform:uppercase}
+.num{color:#FFAB00;font-size:14px;font-weight:700;margin-left:auto}
+.sub{background:#162730;padding:12px 40px;font-size:13px;color:#9AA0A6;border-bottom:1px solid rgba(255,255,255,.06)}
+main{flex:1;display:flex;align-items:center;justify-content:center;padding:40px}
+.mermaid{background:#162730;border-radius:12px;padding:40px;box-shadow:0 4px 24px rgba(0,0,0,.3);max-width:100%;overflow-x:auto}
+.mermaid svg{max-width:100%;height:auto}
+.node:hover{filter:brightness(1.2);cursor:pointer}
+footer{background:#162730;border-top:1px solid rgba(255,255,255,.06);padding:12px 40px;font-size:11px;color:#9AA0A6;display:flex;justify-content:space-between}
+@media(max-width:768px){header,main,.sub,footer{padding:16px 20px}.mermaid{padding:20px}}
+</style>
+</head>
+<body>
+<header>
+<div class="logo">D</div>
+<h1>State Machine Coupling Points</h1>
+<span class="badge">Phase 1</span>
+<span class="num">Diagram 09 of 17</span>
+</header>
+<div class="sub">Conversational Consumer Finance &mdash; FIBO-Aligned &bull; 12 State Machines &bull; 14 Silver Tables &bull; 3 Metric Views &bull; Single Agent per Locale</div>
+<main>
+<div class="mermaid">
+graph LR
+    subgraph Tier1["Tier 1: Foundation"]
+        A_SM["Account Lifecycle SM"]
+        T_SM["Transaction Processing SM"]
+    end
+
+    subgraph Tier2["Tier 2: Behavioral"]
+        B_SM["Spending Behavior SM"]
+        S_SM["Savings Behavior SM"]
+    end
+
+    subgraph Tier3["Tier 3: Product Lifecycle"]
+        P_SM["Product Relationship SM"]
+        CL_SM["Credit Lifecycle SM"]
+    end
+
+    subgraph Tier4["Tier 4: Credit Products"]
+        CC_SM["Credit Card SM"]
+        LN_SM["Loan SM"]
+    end
+
+    subgraph Tier5["Tier 5: Fraud & Security"]
+        FR_SM["Fraud Detection SM"]
+        KY_SM["KYC/AML SM"]
+    end
+
+    subgraph Cross["Cross-Cutting"]
+        ST_SM["Statement SM"]
+        FE_SM["Fee/Interest SM"]
+    end
+
+    A_SM -->|"OPEN → enables"| T_SM
+    A_SM -->|"BLOCKED → declines all"| T_SM
+    T_SM -->|"no activity 365d"| A_SM
+    T_SM -->|"balance threshold"| P_SM
+    T_SM -->|"spending pattern"| B_SM
+    B_SM -->|"anomaly detected"| FR_SM
+    B_SM -->|"savings trigger"| S_SM
+    P_SM -->|"credit approved"| CL_SM
+    CL_SM -->|"card issued"| CC_SM
+    CL_SM -->|"loan disbursed"| LN_SM
+    CC_SM -->|"missed payment"| P_SM
+    LN_SM -->|"missed payment"| P_SM
+    FR_SM -->|"confirmed fraud"| A_SM
+    KY_SM -->|"compliance block"| A_SM
+    A_SM -->|"CLOSED → cancel all"| P_SM
+    T_SM -->|"monthly cycle"| ST_SM
+    CL_SM -->|"interest accrual"| FE_SM
+
+    style Tier1 fill:#d4edda,stroke:#28a745
+    style Tier2 fill:#e6f3ff,stroke:#0066cc
+    style Tier3 fill:#fff3cd,stroke:#ffc107
+    style Tier4 fill:#ffe6cc,stroke:#cc6600
+    style Tier5 fill:#f8d7da,stroke:#dc3545
+    style Cross fill:#e2e3e5,stroke:#6c757d
+</div>
+</main>
+<footer>
+<span>Author: Matthew Giglia &bull; Databricks Field Engineering</span>
+<span>Updated: Oct 7, 2026 &bull; v2 (Expanded Architecture)</span>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({startOnLoad:true,theme:'dark',themeVariables:{primaryColor:'#077A9D',primaryTextColor:'#E8EAED',primaryBorderColor:'#077A9D',lineColor:'#9AA0A6',secondaryColor:'#1B3139',tertiaryColor:'#162730',noteBkgColor:'#2A3A44',noteTextColor:'#E8EAED',noteBorderColor:'#077A9D',actorBkg:'#077A9D',actorTextColor:'#fff',actorBorder:'#077A9D',signalColor:'#E8EAED',signalTextColor:'#E8EAED'},flowchart:{curve:'basis',htmlLabels:true},sequence:{mirrorActors:false,actorMargin:50}});</script>
+</body>
+</html>

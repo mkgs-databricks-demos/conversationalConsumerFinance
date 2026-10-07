@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Conversational Consumer Finance — Customer Pitch</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700;9..40,900&display=swap" rel="stylesheet">
+<style>
+:root{--red:#FF3621;--dark:#1B3139;--green:#00A972;--amber:#FFAB00;--teal:#077A9D}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',system-ui,sans-serif;background:#0D1B22}
+.slide{min-height:100vh;position:relative;display:flex;flex-direction:column;justify-content:center;padding:90px 70px 60px}
+.topbar{position:absolute;top:30px;left:70px;right:70px;display:flex;justify-content:space-between;align-items:center}
+.topbar img{height:26px;width:auto}
+.num{font-size:13px;font-weight:700;letter-spacing:.14em}
+.dark{background:#0D1B22;color:#E8EAED}
+.dark .topbar img{filter:brightness(10)}
+.dark .num{color:#9AA0A6}
+.light{background:#FFFFFF;color:#1B3139}
+.light .num{color:#7A8790}
+.surface{background:#F1F3F4;color:#1B3139}
+.surface .num{color:#7A8790}
+.kicker{font-size:13px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;margin-bottom:18px}
+.dark .kicker{color:#FFAB00}
+.light .kicker,.surface .kicker{color:#FF3621}
+h1{font-size:clamp(44px,6vw,76px);font-weight:900;line-height:1.05;letter-spacing:-.02em}
+h2{font-size:clamp(32px,4.2vw,52px);font-weight:900;line-height:1.1;letter-spacing:-.01em;margin-bottom:14px}
+.sub{font-size:20px;font-weight:400;max-width:900px;margin-top:22px;line-height:1.5}
+.dark .sub{color:#9AA0A6}
+.light .sub,.surface .sub{color:#4A585F}
+.tag{display:inline-block;margin-top:34px;background:var(--teal);color:#fff;font-size:13px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;padding:8px 18px;border-radius:20px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:24px;margin-top:44px}
+.card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:30px 26px}
+.light .card,.surface .card{background:#fff;border:1px solid #E3E7E9;box-shadow:0 4px 18px rgba(27,49,57,.06)}
+.light .card h3,.surface .card h3{color:#1B3139}
+.light .card p,.surface .card p{color:#4A585F}
+.card h3{font-size:19px;font-weight:700;margin-bottom:10px}
+.card p{font-size:14.5px;line-height:1.55}
+.dark .card h3{color:#E8EAED}
+.dark .card p{color:#9AA0A6}
+.bignum{font-size:clamp(52px,5.4vw,84px);font-weight:900;letter-spacing:-.02em;line-height:1}
+.dark .bignum{color:#FF3621}
+.light .bignum{color:#FF3621}
+.caption{font-size:15px;font-weight:500;margin-top:12px;line-height:1.4}
+.dark .caption{color:#9AA0A6}
+.light .caption{color:#4A585F}
+/* Slide 3 layer stack */
+.stack{display:flex;flex-direction:column;gap:12px;margin-top:40px;max-width:1050px}
+.layer{display:flex;align-items:center;gap:22px;border-radius:12px;padding:18px 26px;color:#fff}
+.layer .badge{min-width:46px;height:46px;border-radius:10px;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:900}
+.layer .name{font-size:19px;font-weight:700;min-width:300px}
+.layer .detail{font-size:14.5px;opacity:.92;font-weight:400}
+.l-red{background:linear-gradient(90deg,#FF3621,#D42A17)}
+.l-amber{background:linear-gradient(90deg,#FFAB00,#DB9400)}
+.l-teal{background:linear-gradient(90deg,#077A9D,#055E7A)}
+.l-green{background:linear-gradient(90deg,#00A972,#00865B)}
+.l-dark{background:linear-gradient(90deg,#1B3139,#12222A)}
+.l-slate{background:linear-gradient(90deg,#4A585F,#36454C)}
+/* Stats row */
+.stats{display:flex;gap:0;margin-top:40px;border-radius:14px;overflow:hidden;max-width:1000px}
+.stat{flex:1;padding:20px 24px;text-align:center}
+.stat .v{font-size:30px;font-weight:900}
+.stat .k{font-size:12.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;margin-top:4px}
+/* Slide 5 comparison */
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:40px;max-width:1150px}
+.pane{border-radius:16px;padding:34px 32px}
+.pane.win{background:rgba(0,169,114,.10);border:2px solid var(--green)}
+.pane.lose{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.14)}
+.pane h3{font-size:22px;font-weight:900;margin-bottom:8px}
+.pane .verdict{font-size:14px;font-style:italic;margin-top:18px;line-height:1.5}
+.pane.win .verdict{color:#00A972}
+.pane.lose .verdict{color:#9AA0A6}
+.pane ul{list-style:none;margin-top:16px}
+.pane li{font-size:15px;line-height:1.5;padding:8px 0 8px 26px;position:relative;border-bottom:1px solid rgba(255,255,255,.06)}
+.pane li::before{content:'\25CF';position:absolute;left:0;font-size:11px;top:11px}
+.pane.win li::before{color:#00A972}
+.pane.lose li::before{color:#9AA0A6}
+.pane li b{font-weight:700}
+/* Slide 6 flow */
+.flow{display:flex;align-items:center;gap:14px;margin-top:40px;flex-wrap:wrap}
+.flow .node{padding:16px 26px;border-radius:12px;font-size:16px;font-weight:700;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:#4A585F}
+.flow .node.hot{background:linear-gradient(135deg,#FF3621,#D42A17);color:#fff;border:none;box-shadow:0 6px 24px rgba(255,54,33,.35);padding:20px 30px;font-size:18px}
+.flow .arrow{font-size:26px;color:#FF3621;font-weight:900}
+/* Slide 7 security */
+.secgrid{display:grid;grid-template-columns:1.25fr 1fr;gap:34px;margin-top:36px;align-items:start}
+.secbar{border-radius:12px;padding:18px 24px;color:#fff;display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:14px}
+.secbar .n{font-size:15px;font-weight:900}
+.secbar .d{font-size:13px;opacity:.92;line-height:1.45}
+.callout{margin-top:40px;max-width:1050px;background:#0D1B22;color:#E8EAED;border-left:5px solid var(--red);border-radius:0 14px 14px 0;padding:26px 32px;font-size:19px;font-weight:600;line-height:1.5}
+/* Slide 9 locale */
+.flags{font-size:44px;line-height:1}
+/* Slide 10 timeline */
+.timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:40px}
+.phase{border-radius:14px;padding:26px 22px;color:#fff;min-height:210px}
+.phase .ph{font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;opacity:.85}
+.phase .wk{font-size:15px;font-weight:600;margin:6px 0 12px}
+.phase .nm{font-size:22px;font-weight:900}
+.phase .ds{font-size:13.5px;opacity:.92;margin-top:10px;line-height:1.5}
+/* Slide 11 */
+.center{text-align:center;align-items:center}
+.center .sub{margin-left:auto;margin-right:auto}
+.footer{margin-top:46px;font-size:22px;font-weight:700;color:#FFAB00}
+@media(max-width:860px){.slide{padding:80px 28px 40px}.topbar{left:28px;right:28px}.secgrid,.compare{grid-template-columns:1fr}.timeline{grid-template-columns:1fr 1fr}.layer{flex-direction:column;align-items:flex-start;gap:8px}.layer .name{min-width:0}}
+</style>
+</head>
+<body>
+
+<!-- ═══ 1 · TITLE (dark) ═══ -->
+<section class="slide dark">
+  <div class="topbar"><img src="https://cdn.bfldr.com/9AYANS2F/at/9c6z3t9c35wp88vc2t796qq9/primary-lockup-full-color-rgb.svg?auto=webp" alt="Databricks"><span class="num">01 / 11</span></div>
+  <div class="kicker">Databricks · Financial Services</div>
+  <h1>Conversational<br>Consumer Finance</h1>
+  <p class="sub">A governed AI agent that answers your customers' banking questions — accurately, securely, and in their language.</p>
+  <span class="tag">Consumer Banking</span>
+</section>
+
+<!-- ═══ 2 · THE OPPORTUNITY (light) ═══ -->
+<section class="slide light">
+  <div class="topbar"><img src="https://cdn.bfldr.com/9AYANS2F/at/9c6z3t9c35wp88vc2t796qq9/primary-lockup-full-color-rgb.svg?auto=webp" alt="Databricks"><span class="num">02 / 11</span></div>
+  <div class="kicker">The Opportunity</div>
+  <h2>Your customers already expect this.</h2>
+  <div class="cards">
+    <div class="card"><div class="bignum">78%</div><div class="caption">of consumers prefer self-service for routine banking questions</div></div>
+    <div class="card"><div class="bignum">3.2B</div><div class="caption">mobile banking users globally — and every one of them is a potential user of your AI agent</div></div>
+    <div class="card"><div class="bignum">&lt;3s</div><div class="caption">expected response time. Voice-of-the-customer speed, not call-center speed.</div></div>
+    <div class="card"><div class="bignum">0</div><div class="caption">tolerance for cross-customer data leaks. One breach ends the program.</div></div>
+  </div>
+</section>
+
+<!-- ═══ 3 · ARCHITECTURE (surface) ═══ -->
+<section class="slide surface">
+  <div class="topbar"><img src="https://cdn.bfldr.com/9AYANS2F/at/9c6z3t9c35wp88vc2t796qq9/primary-lockup-full-color-rgb.svg?auto=webp" alt="Databricks"><span class="num">03 / 11</span></div>
+  <div class="kicker">Architecture</div>
+  <h2>Six layers. One platform.</h2>
+  <div class="stack">
+    <div class="layer l-red"><div class="badge">L6</div><div class="name">Consumer Application</div><div class="detail">Databricks App · Lakebase · API Gateway — the experience your customers touch</div></div>
+    <div class="layer l-amber"><div class="badge">L5</div><div class="name">Observability</div><div class="detail">MLflow 3 · OpenTelemetry · Genie Code — every question traced, every answer auditable</div></div>
+    <div class="layer l-teal"><div class="badge">L4</div><div class="name">Agent Orchestration</div><div class="detail">Single Genie Agent · Knowledge Assistant · MCP Tools — one agent, not a swarm</div></div>
+    <div class="layer l-green"><div class="badge">L3</div><div class="name">Semantic Layer</div><div class="detail">Parameterized Metric Views · UC Pages · Domains — certified definitions, governed access</div></div>
+    <div class="layer l-dark"><div class="badge">L2</div><div class="name">Data Platform</div><div class="detail">Medallion Architecture · FIBO-Aligned Silver · Enzyme Gold — governed at every hop</div></div>
+    <div class="layer l-slate"><div class="badge">L1</div><div class="name">Data Generation</div><div class="detail">Core banking systems or synthetic generator — your existing source of truth</div></div>
+  </div>
+</section>
+
+<!-- ═══ 4 · THE AGENT (light) ═══ -->
+<section class="slide light">
+  <div class="topbar"><img src="https://cdn.bfldr.com/9AYANS2F/at/9c6z3t9c35wp88vc2t796qq9/primary-lockup-full-color-rgb.svg?auto=webp" alt="Databricks"><span class="num">04 / 11</span></div>
+  <div class="kicker">The Agent</div>
+  <h2>One agent. Three metric views.<br>Every banking question answered.</h2>
+  <div class="cards">
+    <div class="card"><h3 style="color:#FF3621">Transaction Metrics</h3><p>Balance, spending, and income questions. "What did I spend on groceries last month?" Answered from certified metric views in seconds.</p></div>
+    <div class="card"><h3 style="color:#077A9D">Product Metrics</h3><p>Accounts, products, and eligibility. "Do I qualify for a savings tier upgrade?" Served from governed product definitions.</p></div>
+    <div class="card"><h3 style="color:#00A972">Behavior Metrics</h3><p>Trends, categories, and anomalies. "Is my spending unusual this month?" Detected against the customer's own history.</p></div>
+  </div>
+  <div class="stats">
+    <div class="stat" style="background:#1B3139;color:#fff"><div class="v">12</div><div class="k">Measures</div></div>
+    <div class="stat" style="background:#FF3621;color:#fff"><div class="v">14</div><div class="k">Dimensions</div></div>
+    <div class="stat" style="background:#077A9D;color:#fff"><div class="v">4/50</div><div class="k">Sources Used</div></div>
+    <div class="stat" style="background:#FFAB00;color:#1B3139"><div class="v">3</div><div class="k">Locales</div></div>
+  </div>
+</section>
+
+<!-- ═══ 5 · FIBO AS INPUT (dark) ═══ -->
+<section class="slide dark">
+  <div class="topbar"><img src="https://cdn.bfldr.com/9AYANS2F/at/9c6z3t9c35wp88vc2t796qq9/primary-lockup-full-color-rgb.svg?auto=webp" alt="Databricks"><span class="num">05 / 11</span></div>
+  <div class="kicker">The Industry Has Evolved</div>
+  <h2>FIBO is a starting point,<br>not the destination.</h2>
+  <div class="compare">
+    <div class="pane win">
+      <h3 style="color:#00A972">Ontology as Input</h3>
+      <p style="color:#9AA0A6;font-size:14.5px">FIBO definitions feed Genie Code, which generates deterministic, tested UC Semantics.</p>
+      <ul>
+        <li><b>Metric views</b> with exact SQL — every number reproducible</li>
+        <li><b>UC Pages</b> with certified definitions your teams trust</li>
+        <li><b>Curated Genie Agent</b> with validated queries</li>
+      </ul>
+      <div class="verdict">The ontology's value is captured. Its complexity is not inherited.</div>
+    </div>
+    <div class="pane lose">
+      <h3 style="color:#9AA0A6">Ontology as Infrastructure</h3>
+      <p style="color:#9AA0A6;font-size:14.5px">A knowledge graph the agent traverses at question time.</p>
+      <ul>
+        <li>A <b>second system</b> to govern, alongside your data platform</li>
+        <li>A <b>second thing</b> to make compliant — SOC 2, DPIA, audits</li>
+        <li>A query layer that <b>cannot enforce</b> row-level consumer isolation at the SQL level</li>
+      </ul>
+      <div class="verdict">More infrastructure does not mean better answers.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 6 · ONTOLOGY TO SEMANTICS (light) ═══ -->
+<section class="slide light">
+  <div class="topbar"><img src="https://cdn.bfldr.com/9AYANS2F/at/9c6z3t9c35wp88vc2t796qq9/primary-lockup-full-color-rgb.svg?auto=webp" alt="Databricks"><span class="num">06 / 11</span></div>
+  <div class="kicker">From Ontology to Semantics</div>
+  <h2>From industry definitions to<br>your certified semantics.</h2>
+  <div class="flow">
+    <div class="node">FIBO Ontology</div><div class="arrow">→</div>
+    <div class="node">Genie Code</div><div class="arrow">→</div>
+    <div class="node hot">UC Semantics</div><div class="arrow">→</div>
+    <div class="node">Genie Agent</div>
+  </div>
+  <div class="cards">
+    <div class="card"><h3 style="color:#FF3621">Deterministic</h3><p>Every metric has an exact SQL definition. No probabilistic graph traversal between your customer and their number.</p></div>
+    <div class="card"><h3 style="color:#077A9D">Tested</h3><p>100-question benchmarks per locale. Parameter inclusion ≥95%. Cross-consumer isolation 100%.</p></div>
+    <div class="card"><h3 style="color:#00A972">Fast</h3><p>Enzyme-optimized materialized views. Sub-200ms query latency, so the agent answers at conversation speed.</p></div>
+  </div>
+</section>
+
+<!-- ═══ 7 · SECURITY (surface) ═══ -->
+<section class="slide surface">
+  <div class="topbar"><img src="https://cdn.bfldr.com/9AYANS2F/at/9c6z3t9c35wp88vc2t796qq9/primary-lockup-full-color-rgb.svg?auto=webp" alt="Databricks"><span class="num">07 / 11</span></div>
+  <div class="kicker">Security</div>
+  <h2>Defense in depth. Consumer data<br>isolation by design.</h2>
+  <div class="secgrid">
+    <div>
+      <div class="secbar" style="background:linear-gradient(90deg,#00A972,#00865B)"><div class="n">Hard Enforcement · ~8ms</div><div class="d">JWT · Session · Consent · Rate Limit · Sanitization · Required Parameter · SQL Validator</div></div>
+      <div class="secbar" style="background:linear-gradient(90deg,#FFAB00,#DB9400)"><div class="n">Soft Validation · ~200ms</div><div class="d">Topic · PII · Appropriateness · Language</div></div>
+      <div class="secbar" style="background:linear-gradient(90deg,#077A9D,#055E7A)"><div class="n">Audit · async · 0ms</div><div class="d">MLflow 3 · Anomaly Detection · Cross-Consumer Correlation · SQL Analysis</div></div>
+    </div>
+    <div class="card">
+      <h3>Parameterized metric views</h3>
+      <p>Every consumer query passes a required <b style="font-family:monospace">consumer_guid</b> parameter. There is no default. A query without it <b>fails</b> — it does not return empty, it does not fall back. The agent literally cannot construct a query that reads another customer's data.</p>
+      <p style="margin-top:12px">Isolation is enforced at the SQL layer — below the agent, below the application, in the platform itself.</p>
+    </div>
+  </div>
+  <div class="callout">No other consumer AI architecture in the market provides this level of data isolation at the SQL layer.</div>
+</section>
+
+<!-- ═══ 8 · OBSERVABILITY (light) ═══ -->
+<section class="slide light">
+  <div class="topbar"><img src="https://cdn.bfldr.com/9AYANS2F/at/9c6z3t9c35wp88vc2t796qq9/primary-lockup-full-color-rgb.svg?auto=webp" alt="Databricks"><span class="num">08 / 11</span></div>
+  <div class="kicker">Observability</div>
+  <h2>Every question traced.<br>Every answer auditable.</h2>
+  <div class="cards">
+    <div class="card"><h3 style="color:#FF3621">Full Trace</h3><p>An immutable MLflow 3 trace with 8 spans per question — from HTTP request to SQL result. Regulators can replay any answer.</p></div>
+    <div class="card"><h3 style="color:#077A9D">Real-Time Metrics</h3><p>OpenTelemetry counters and gauges stream latency, token usage, and answer rates into your existing dashboards.</p></div>
+    <div class="card"><h3 style="color:#FFAB00">Automated Alerts</h3><p>Seven alerting rules, P0–P3. An answer-quality regression pages your on-call before your customers notice.</p></div>
+    <div class="card"><h3 style="color:#00A972">Genie Code Analysis</h3><p>Nightly SQL pattern analysis finds drift, slow queries, and unanswered question clusters — and fixes them.</p></div>
+  </div>
+</section>
+
+<!-- ═══ 9 · MULTI-LOCALE (dark) ═══ -->
+<section class="slide dark">
+  <div class="topbar"><img src="https://cdn.bfldr.com/9AYANS2F/at/9c6z3t9c35wp88vc2t796qq9/primary-lockup-full-color-rgb.svg?auto=webp" alt="Databricks"><span class="num">09 / 11</span></div>
+  <div class="kicker">Multi-Locale</div>
+  <h2>One codebase.<br>Deploy as any bank.</h2>
+  <div class="cards">
+    <div class="card"><span class="flags">🇺🇸</span><h3 style="margin-top:10px">American Bank</h3><p>USD · ACH, Wire, Zelle<br>“What's my checking account balance?”<br>Thanksgiving spikes · Walmart dominates merchant mix</p></div>
+    <div class="card"><span class="flags">🇬🇧</span><h3 style="margin-top:10px">British Bank</h3><p>GBP · BACS, CHAPS, Faster Payments<br>“What's my current account balance?”<br>Boxing Day sales · Tesco on every statement</p></div>
+    <div class="card"><span class="flags">🇳🇱</span><h3 style="margin-top:10px">Dutch Bank</h3><p>EUR · SEPA Credit, SCT Inst, SDD<br>“Wat is mijn saldo?”<br>Sinterklaas · Albert Heijn is the top merchant</p></div>
+  </div>
+</section>
+
+<!-- ═══ 10 · TIMELINE (light) ═══ -->
+<section class="slide light">
+  <div class="topbar"><img src="https://cdn.bfldr.com/9AYANS2F/at/9c6z3t9c35wp88vc2t796qq9/primary-lockup-full-color-rgb.svg?auto=webp" alt="Databricks"><span class="num">10 / 11</span></div>
+  <div class="kicker">Timeline</div>
+  <h2>12 weeks to production.</h2>
+  <div class="timeline">
+    <div class="phase" style="background:linear-gradient(160deg,#FF3621,#D42A17)"><div class="ph">Phase 1</div><div class="wk">Weeks 1–2</div><div class="nm">Foundation</div><div class="ds">Synthetic data generation, FIBO mapping, Silver tables, first metric views.</div></div>
+    <div class="phase" style="background:linear-gradient(160deg,#077A9D,#055E7A)"><div class="ph">Phase 2</div><div class="wk">Weeks 3–5</div><div class="nm">App Spike</div><div class="ds">Consumer app, security pipeline, first working demo in front of stakeholders.</div></div>
+    <div class="phase" style="background:linear-gradient(160deg,#00A972,#00865B)"><div class="ph">Phase 3</div><div class="wk">Weeks 6–9</div><div class="nm">Expansion</div><div class="ds">Full metric coverage, multi-locale, observability, benchmark suite.</div></div>
+    <div class="phase" style="background:linear-gradient(160deg,#FFAB00,#DB9400)"><div class="ph">Phase 4</div><div class="wk">Weeks 10–12</div><div class="nm">Production</div><div class="ds">Load testing, runbooks, alerting, go-live with your first locale.</div></div>
+  </div>
+  <div class="stats">
+    <div class="stat" style="background:#F1F3F4"><div class="v" style="color:#1B3139">~0.75</div><div class="k" style="color:#4A585F">Databricks FTE</div></div>
+    <div class="stat" style="background:#F1F3F4"><div class="v" style="color:#1B3139">~2.5</div><div class="k" style="color:#4A585F">Bank FTE</div></div>
+    <div class="stat" style="background:#F1F3F4"><div class="v" style="color:#FF3621">2 wks</div><div class="k" style="color:#4A585F">to first working demo</div></div>
+  </div>
+</section>
+
+<!-- ═══ 11 · CLOSING (dark, centered) ═══ -->
+<section class="slide dark center">
+  <div class="topbar"><img src="https://cdn.bfldr.com/9AYANS2F/at/9c6z3t9c35wp88vc2t796qq9/primary-lockup-full-color-rgb.svg?auto=webp" alt="Databricks"><span class="num">11 / 11</span></div>
+  <div class="kicker">Closing</div>
+  <h1 style="font-size:clamp(40px,5.5vw,68px)">The design is the pitch.</h1>
+  <p class="sub">One semantic layer serves both your consumer app and your internal analytics. One platform governs both. One team builds both.</p>
+  <div class="cards" style="max-width:1050px">
+    <div class="card"><h3 style="color:#00A972">Secure</h3><p>4-layer defense in depth. 0 cross-consumer leaks — enforced at the SQL layer, not by policy.</p></div>
+    <div class="card"><h3 style="color:#FFAB00">Fast</h3><p>&lt;3s p99 end-to-end. Enzyme-optimized materialized views keep every answer at conversation speed.</p></div>
+    <div class="card"><h3 style="color:#077A9D">Global</h3><p>Multi-locale by configuration, not re-engineering. One codebase, any market.</p></div>
+    <div class="card"><h3 style="color:#FF3621">Observable</h3><p>Every trace auditable with MLflow 3 + OpenTelemetry. Answers you can defend to any regulator.</p></div>
+  </div>
+  <div class="footer">Let's build it together.</div>
+</section>
+
+</body>
+</html>

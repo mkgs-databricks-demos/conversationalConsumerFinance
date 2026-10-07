@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>Locale Abstraction</title></head>
+<body style="background:#0D1B22;display:flex;justify-content:center;padding:40px">
+<div class="mermaid">
+graph TB
+    subgraph Codebase["One Codebase (17 Components)"]
+        SM["State Machine<br/>Simulator (12 SMs)"]
+        SDP["Lakeflow<br/>Pipeline (SDP)"]
+        MV_Template["3 Metric View<br/>YAML Templates"]
+        Page_Template["60 UC Page<br/>Templates"]
+        Agent_Template["Genie Agent<br/>Template"]
+        App["Databricks App"]
+        Validator["SQL Validator"]
+    end
+
+    subgraph Locales["Locale Config (YAML)"]
+        US["locales/us.yaml<br/>USD · ACH · Routing#<br/>Thanksgiving · Walmart<br/>checking account"]
+        GB["locales/gb.yaml<br/>GBP · FPS · Sort Code<br/>Boxing Day · Tesco<br/>current account"]
+        NL["locales/nl.yaml<br/>EUR · SCT · IBAN<br/>Sinterklaas · Albert Heijn<br/>betaalrekening"]
+    end
+
+    subgraph Deployments["Three Deployments"]
+        US_Deploy["American Bank<br/>--var locale=us"]
+        GB_Deploy["British Bank<br/>--var locale=gb"]
+        NL_Deploy["Dutch Bank<br/>--var locale=nl"]
+    end
+
+    Codebase -->|"reads"| US --> US_Deploy
+    Codebase -->|"reads"| GB --> GB_Deploy
+    Codebase -->|"reads"| NL --> NL_Deploy
+
+    subgraph US_Output["US Output"]
+        US_Data["USD transactions<br/>ACH/WIRE/ZELLE<br/>Walmart, Starbucks"]
+        US_MV["Synonyms: checking<br/>account, balance"]
+        US_Agent["Language: English<br/>Holidays: Thanksgiving"]
+    end
+
+    subgraph NL_Output["NL Output"]
+        NL_Data["EUR transactions<br/>SCT/SCT_INST/SDD<br/>Albert Heijn, NS"]
+        NL_MV["Synonyms: betaalrekening<br/>saldo, overschrijving"]
+        NL_Agent["Language: Nederlands<br/>Holidays: Sinterklaas"]
+    end
+
+    US_Deploy --> US_Output
+    NL_Deploy --> NL_Output
+
+    style US fill:#b3d9ff,stroke:#0066cc
+    style GB fill:#ffcccc,stroke:#cc0000
+    style NL fill:#ffe6b3,stroke:#cc6600
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({startOnLoad:true,theme:'dark',themeVariables:{primaryColor:'#077A9D',primaryTextColor:'#E8EAED',primaryBorderColor:'#077A9D',lineColor:'#9AA0A6',secondaryColor:'#1B3139',tertiaryColor:'#162730',noteBkgColor:'#2A3A44',noteTextColor:'#E8EAED',noteBorderColor:'#077A9D',actorBkg:'#077A9D',actorTextColor:'#fff',actorBorder:'#077A9D',signalColor:'#E8EAED',signalTextColor:'#E8EAED'},flowchart:{curve:'basis',htmlLabels:true},sequence:{mirrorActors:false,actorMargin:50}});</script>
+</body></html>
